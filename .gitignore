@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Build outputs
+dist/
+.next/
+out/
+build/
+.turbo/
+
+# Test & coverage
+coverage/
+.nyc_output/
+
+# Local development
+.local-postgres/
+.responsive-screenshots/
+
+# Logs & debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# TypeScript
+*.tsbuildinfo
+
+# Prisma
+packages/database/prisma/*.db
+packages/database/prisma/*.db-journal

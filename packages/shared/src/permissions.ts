@@ -1,0 +1,27 @@
+export const PERMISSIONS = {
+  ORG_READ: "org:read",
+  ORG_UPDATE: "org:update",
+  TEAM_READ: "team:read",
+  TEAM_INVITE: "team:invite",
+  TEAM_MANAGE: "team:manage",
+  INBOX_READ: "inbox:read",
+  INBOX_REPLY: "inbox:reply",
+  INBOX_ASSIGN: "inbox:assign",
+  INBOX_CLOSE: "inbox:close",
+  CUSTOMERS_READ: "customers:read",
+  CUSTOMERS_UPDATE: "customers:update",
+  TAGS_MANAGE: "tags:manage",
+  NOTES_MANAGE: "notes:manage",
+  KNOWLEDGE_READ: "knowledge:read",
+  KNOWLEDGE_MANAGE: "knowledge:manage",
+  CHANNELS_READ: "channels:read",
+  CHANNELS_MANAGE: "channels:manage",
+  AI_READ: "ai:read",
+  AI_MANAGE: "ai:manage",
+  ANALYTICS_READ: "analytics:read",
+  BILLING_READ: "billing:read",
+  BILLING_MANAGE: "billing:manage",
+  SETTINGS_MANAGE: "settings:manage",
+} as const;
+
+export type PermissionKey = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

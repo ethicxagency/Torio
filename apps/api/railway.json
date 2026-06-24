@@ -1,0 +1,12 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm ci && npm run db:generate && npm run build --workspace=@mango/api"
+  },
+  "deploy": {
+    "startCommand": "npm run db:migrate --workspace=@mango/database -- --name deploy && npm run start --workspace=@mango/api",
+    "healthcheckPath": "/api/v1/health",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}

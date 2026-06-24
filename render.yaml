@@ -1,0 +1,77 @@
+# Render Blueprint — Torio AI eCommerce Messaging Platform
+# Docs: docs/DEPLOYMENT_READINESS.md
+#
+# Set secrets in the Render Dashboard. Link Postgres and Redis manually.
+
+databases:
+  - name: torio-postgres
+    plan: basic-256mb
+    region: singapore
+    databaseName: torio_messaging
+    user: torio
+
+services:
+  - type: web
+    name: torio-api
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci && npm run db:generate && npm run build --workspace=@mango/shared && npm run build --workspace=@mango/database && npm run build --workspace=@mango/api
+    startCommand: node scripts/render-start-api.mjs
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: torio-postgres
+          property: connectionString
+      - key: PORT
+        value: 4000
+      - key: API_URL
+        sync: false
+      - key: WEB_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: REDIS_URL
+        sync: false
+      - key: META_APP_ID
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: META_WEBHOOK_VERIFY_TOKEN
+        generateValue: true
+      - key: META_OAUTH_REDIRECT_URL
+        sync: false
+      - key: META_WEBHOOK_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LOG_LEVEL
+        value: log
+
+  - type: web
+    name: torio-web
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci && npm run build --workspace=@mango/shared && npm run build --workspace=@mango/web
+    startCommand: npm run start --workspace=@mango/web
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+
+  - type: redis
+    name: torio-redis
+    plan: free
+    region: singapore
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []

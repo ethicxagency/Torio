@@ -1,0 +1,34 @@
+{
+  "name": "torio-messaging-platform",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:local": "node scripts/run-local.mjs",
+    "dev:api": "npm run dev --workspace=@mango/api",
+    "dev:web": "npm run dev --workspace=@mango/web",
+    "dev:admin": "npm run dev --workspace=@mango/admin",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "npm run generate --workspace=@mango/database",
+    "db:migrate": "npm run migrate --workspace=@mango/database",
+    "db:deploy": "npm run migrate:deploy --workspace=@mango/database",
+    "db:push": "npm run push --workspace=@mango/database",
+    "db:seed": "npm run seed --workspace=@mango/database",
+    "db:studio": "npm run studio --workspace=@mango/database",
+    "start:render:api": "node scripts/render-start-api.mjs"
+  },
+  "devDependencies": {
+    "embedded-postgres": "^18.4.0-beta.17",
+    "turbo": "^2.5.4",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "packageManager": "npm@10.9.2"
+}
