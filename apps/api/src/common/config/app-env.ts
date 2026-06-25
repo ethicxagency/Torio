@@ -2,7 +2,12 @@ const DEV_WEB_URL = "http://localhost:3010";
 const DEV_API_URL = "http://localhost:4000";
 
 export function getApiPort(): number {
-  const raw = process.env.PORT ?? process.env.API_PORT ?? "4000";
+  // Unified deploy: NestJS binds to INTERNAL_API_PORT; Render PORT is the public proxy.
+  const raw =
+    process.env.INTERNAL_API_PORT?.trim() ||
+    process.env.PORT?.trim() ||
+    process.env.API_PORT?.trim() ||
+    "4000";
   const port = Number(raw);
   return Number.isFinite(port) && port > 0 ? port : 4000;
 }

@@ -21,9 +21,15 @@ export interface MetaOAuthResult {
 }
 
 const STORAGE_KEY = "torio-meta-oauth";
-const API_ORIGIN = new URL(
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1",
-).origin;
+function getApiOrigin(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return new URL(process.env.NEXT_PUBLIC_API_URL).origin;
+  }
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return "http://localhost:4000";
+}
 
 function saveOAuthResult(result: MetaOAuthResult) {
   sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result));
@@ -88,7 +94,7 @@ export function useMetaOAuth(
 
   useEffect(() => {
     function onMessage(event: MessageEvent) {
-      if (event.origin !== window.location.origin && event.origin !== API_ORIGIN) return;
+      if (event.origin !== window.location.origin && event.origin !== getApiOrigin()) return;
       if (event.data?.type !== "META_OAUTH") return;
       handleOAuthResult(event.data as MetaOAuthResult);
     }

@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { Package, Search, Truck } from "lucide-react";
-import { API_URL } from "@/lib/api";
+import { getApiBaseUrl } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,7 +53,7 @@ export default function TrackPage() {
       if (orderNumber) params.set("orderNumber", orderNumber);
       if (trackingNumber) params.set("trackingNumber", trackingNumber);
 
-      const res = await fetch(`${API_URL}/portal/tracking?${params.toString()}`);
+      const res = await fetch(`${getApiBaseUrl()}/portal/tracking?${params.toString()}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Tracking lookup failed");
       setResult(data as PortalResult);

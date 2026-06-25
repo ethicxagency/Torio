@@ -21,8 +21,8 @@ export const BRAND = {
   },
 
   auth: {
-    loginTitle: "Welcome Back to Torio",
-    loginSubtitle: "Sign in to manage your omnichannel inbox",
+    loginTitle: "Welcome Back",
+    loginSubtitle: "AI Business Messaging Platform",
     signupTitle: "Create Your Torio Account",
     signupSubtitle: "Set up your business workspace in minutes",
     forgotPasswordTitle: "Reset Your Torio Password",

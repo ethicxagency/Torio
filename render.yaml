@@ -1,7 +1,8 @@
-# Render Blueprint — Torio AI eCommerce Messaging Platform
-# Docs: docs/DEPLOYMENT_READINESS.md
+# Render Blueprint — Torio (unified web + API on one domain)
+# Docs: docs/UNIFIED_RENDER_DEPLOYMENT.md
 #
-# Set secrets in the Render Dashboard. Link Postgres and Redis manually.
+# Browser: https://<your-service>.onrender.com/
+# API:      https://<your-service>.onrender.com/api/v1/*
 
 databases:
   - name: torio-postgres
@@ -12,12 +13,12 @@ databases:
 
 services:
   - type: web
-    name: torio-api
+    name: torio
     runtime: node
     plan: starter
     region: singapore
-    buildCommand: npm ci --include=dev && npm run build:render:api
-    startCommand: node scripts/render-start-api.mjs
+    buildCommand: npm ci --include=dev && npm run build:render:unified
+    startCommand: node scripts/render-start-unified.mjs
     healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
@@ -26,13 +27,17 @@ services:
         fromDatabase:
           name: torio-postgres
           property: connectionString
-      - key: PORT
-        value: 4000
+      - key: INTERNAL_API_PORT
+        value: "4001"
+      - key: INTERNAL_WEB_PORT
+        value: "3001"
       - key: API_URL
         sync: false
       - key: WEB_URL
         sync: false
       - key: CORS_ORIGINS
+        sync: false
+      - key: NEXT_PUBLIC_API_URL
         sync: false
       - key: JWT_ACCESS_SECRET
         generateValue: true
@@ -54,20 +59,6 @@ services:
         sync: false
       - key: LOG_LEVEL
         value: log
-
-  - type: web
-    name: torio-web
-    runtime: node
-    plan: starter
-    region: singapore
-    buildCommand: npm ci --include=dev && npm run build:render:web
-    startCommand: npm run start --workspace=@mango/web
-    healthCheckPath: /
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_API_URL
-        sync: false
 
   - type: redis
     name: torio-redis

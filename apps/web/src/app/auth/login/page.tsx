@@ -69,8 +69,8 @@ export default function LoginPage() {
 
         <Card className="border-0 shadow-xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-xl">Sign in</CardTitle>
-            <CardDescription>Use your {BRAND.name} account credentials</CardDescription>
+            <CardTitle className="text-xl">{BRAND.auth.loginTitle}</CardTitle>
+            <CardDescription>{BRAND.auth.loginSubtitle}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -79,12 +79,7 @@ export default function LoginPage() {
                 <Input id="email" type="email" autoComplete="email" placeholder="you@business.com" {...register("email")} />
               </div>
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link href="/auth/forgot-password" className="inline-flex min-h-[44px] items-center text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" autoComplete="current-password" {...register("password")} />
               </div>
               {error && (
@@ -93,15 +88,31 @@ export default function LoginPage() {
                 </div>
               )}
               <Button type="submit" className="w-full min-h-[44px]" disabled={isSubmitting}>
-                {isSubmitting ? "Signing in..." : "Sign in"}
+                {isSubmitting ? "Logging in..." : "Login"}
               </Button>
             </form>
-            <p className="mt-6 text-center text-sm text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/signup" className="inline-flex min-h-[44px] items-center font-medium text-primary hover:underline">
-                Sign up free
+
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">Or</span>
+              </div>
+            </div>
+
+            <Button type="button" variant="outline" className="w-full min-h-[44px]" disabled>
+              Continue with Google
+            </Button>
+
+            <div className="mt-6 flex flex-col gap-3 text-center text-sm">
+              <Link href="/register" className="inline-flex min-h-[44px] items-center justify-center font-medium text-primary hover:underline">
+                Create Account
               </Link>
-            </p>
+              <Link href="/forgot-password" className="inline-flex min-h-[44px] items-center justify-center text-muted-foreground hover:text-foreground hover:underline">
+                Forgot Password
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
