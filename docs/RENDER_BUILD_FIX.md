@@ -1,47 +1,42 @@
-# Render Build Compatibility Fix
+# Render Build Fix — Turbo Not Found
 
-**Issue:** `sh: 1: turbo: not found` during Render builds.
+**Issue:** `sh: 1: turbo: not found` on Render.
 
 ## Root cause
 
-Render sets `NODE_ENV=production`. With `npm ci`, npm **omits `devDependencies`**. Turbo (and other build tools like `@nestjs/cli`, `typescript`, `prisma`) were only in `devDependencies`, so they were not installed during the build phase.
+Render sets `NODE_ENV=production`. With default npm behavior, `npm ci` skips `devDependencies`. Turbo was originally in `devDependencies`, so `node_modules/.bin/turbo` was missing when build scripts ran `turbo run build`.
 
-If the Render dashboard build command uses `npm run build`, it invokes `turbo run build` from the root `package.json`, which requires the `turbo` binary.
+## Changes
 
-## Fixes applied
+| File | Change |
+|------|--------|
+| `package.json` | Moved `turbo` to **`dependencies`** |
+| `package.json` | `build:render:api` → `npm run db:generate && turbo run build --filter=@mango/api...` |
+| `package.json` | `build:render:web` → `turbo run build --filter=@mango/web...` |
+| `packages/database/package.json` | Moved `prisma` to **`dependencies`** (build + migrate deploy) |
+| `.npmrc` | `production=false` so Nest CLI / TypeScript install during Render builds |
+| `render.yaml` | `npm ci --include=dev && npm run build:render:api|web` |
 
-| Change | File |
-|--------|------|
-| Moved `turbo` to `dependencies` | `package.json` |
-| Added `build:render:api` / `build:render:web` (no turbo required) | `package.json` |
-| Build uses `npm ci --include=dev` + render build scripts | `render.yaml` |
-| Moved `prisma` to `dependencies` (needed for `db:generate` at build + `db:deploy` at startup) | `packages/database/package.json` |
+## Workspaces
 
-## Render build commands (render.yaml)
+Root `package.json` workspaces: `packages/*`, `apps/*` — unchanged, valid.
 
-**torio-api:**
+## Render build commands
+
 ```bash
+# torio-api
 npm ci --include=dev && npm run build:render:api
-```
 
-**torio-web:**
-```bash
+# torio-web
 npm ci --include=dev && npm run build:render:web
 ```
-
-## Dashboard override
-
-If Render services use a custom build command instead of `render.yaml`, set:
-
-- **API:** `npm ci --include=dev && npm run build:render:api`
-- **Web:** `npm ci --include=dev && npm run build:render:web`
-
-Do **not** use bare `npm run build` unless turbo is in `dependencies` (now fixed).
 
 ## Verification
 
 ```bash
-NODE_ENV=production npx turbo --version   # should print version
-npm run build:render:api                  # should complete without turbo
-npm run build:render:web                  # should complete
+test -x node_modules/.bin/turbo          # turbo binary present
+NODE_ENV=production npm run build:render:api
+NODE_ENV=production npm run build        # full monorepo turbo build
 ```
+
+Both should complete without `turbo: not found`.
