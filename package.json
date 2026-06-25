@@ -12,7 +12,7 @@
     "dev:web": "npm run dev --workspace=@mango/web",
     "dev:admin": "npm run dev --workspace=@mango/admin",
     "build": "turbo run build",
-    "build:render:api": "npm run db:generate && turbo run build --filter=@mango/api...",
+    "build:render:api": "npm run build:render:unified",
     "build:render:web": "turbo run build --filter=@mango/web...",
     "build:render:unified": "npm run db:generate && turbo run build --filter=@mango/web... --filter=@mango/api...",
     "lint": "turbo run lint",
@@ -24,7 +24,7 @@
     "db:push": "npm run push --workspace=@mango/database",
     "db:seed": "npm run seed --workspace=@mango/database",
     "db:studio": "npm run studio --workspace=@mango/database",
-    "start:render:api": "node scripts/render-start-api.mjs",
+    "start:render:api": "node scripts/render-start-unified.mjs",
     "start:render:unified": "node scripts/render-start-unified.mjs"
   },
   "dependencies": {
