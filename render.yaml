@@ -16,7 +16,7 @@ services:
     runtime: node
     plan: starter
     region: singapore
-    buildCommand: npm ci && npm run db:generate && npm run build --workspace=@mango/shared && npm run build --workspace=@mango/database && npm run build --workspace=@mango/api
+    buildCommand: npm ci --include=dev && npm run build:render:api
     startCommand: node scripts/render-start-api.mjs
     healthCheckPath: /api/v1/health
     envVars:
@@ -60,7 +60,7 @@ services:
     runtime: node
     plan: starter
     region: singapore
-    buildCommand: npm ci && npm run build --workspace=@mango/shared && npm run build --workspace=@mango/web
+    buildCommand: npm ci --include=dev && npm run build:render:web
     startCommand: npm run start --workspace=@mango/web
     healthCheckPath: /
     envVars:
