@@ -8,6 +8,7 @@
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
+    "resolve-failed-init": "prisma migrate resolve --rolled-back 20250621000000_init",
     "push": "prisma db push",
     "seed": "tsx prisma/seed.ts",
     "studio": "prisma studio",

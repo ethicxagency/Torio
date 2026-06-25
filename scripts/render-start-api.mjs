@@ -24,9 +24,23 @@ function run(command, args) {
   });
 }
 
+async function migrateDeploy() {
+  try {
+    await run("npm", ["run", "db:deploy"]);
+  } catch (error) {
+    console.warn("[render] migrate deploy failed — attempting P3009 recovery for failed init migration...");
+    try {
+      await run("npm", ["run", "db:resolve-failed-init"]);
+      await run("npm", ["run", "db:deploy"]);
+    } catch (retryError) {
+      throw retryError;
+    }
+  }
+}
+
 async function main() {
   console.log("[render] Running Prisma migrate deploy...");
-  await run("npm", ["run", "db:deploy"]);
+  await migrateDeploy();
 
   console.log("[render] Starting API...");
   await run("npm", ["run", "start:prod", "--workspace=@mango/api"]);

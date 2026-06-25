@@ -19,6 +19,7 @@
     "db:generate": "npm run generate --workspace=@mango/database",
     "db:migrate": "npm run migrate --workspace=@mango/database",
     "db:deploy": "npm run migrate:deploy --workspace=@mango/database",
+    "db:resolve-failed-init": "npm run resolve-failed-init --workspace=@mango/database",
     "db:push": "npm run push --workspace=@mango/database",
     "db:seed": "npm run seed --workspace=@mango/database",
     "db:studio": "npm run studio --workspace=@mango/database",
